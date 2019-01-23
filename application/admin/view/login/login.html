@@ -1,0 +1,53 @@
+{load file="/static/dist/layui/css/layui.css" /}
+{load file="/static/css/login.css" /}
+{load file="/static/dist/jquery-2.1.1.min.js" /}
+<script>
+    !function(n) {
+        var e = n.document,
+            t = e.documentElement,
+            i = 720,
+            d = i / 100,
+            o = "orientationchange" in n ? "orientationchange" : "resize",
+            a = function() {
+                var n = t.clientWidth || 320;
+                n > 720 && (n = 720), t.style.fontSize = n / d + "px"
+            };
+        e.addEventListener && (n.addEventListener(o, a, !1), e.addEventListener("DOMContentLoaded", a, !1))
+    }(window);
+</script>
+<div class="user-login">
+    <img style="width: .88rem;height: .88rem;margin: .4rem 0;" src="/static/image/login_logo@2x.png" alt="">
+    <h1>聚会小游戏后台</h1>
+    <form class="layui-form myForm">
+        <input type="text" class="layui-input username" name="username" placeholder="账号" autocomplete="off" lay-verify="required">
+        <input type="password" class="layui-input userpassword" name="password" placeholder="密码" autocomplete="off" lay-verify="required">
+        <button type="button" class="login">登录</button>
+    </form>
+</div>
+{load file="/static/dist/layui/layui.js" /}
+<script>
+    layui.use(['element','layer'],function(){
+        var layer=layui.layer;
+        var element=layui.element;
+            $('.login').click(function(){
+            var username=$('.username').val();
+            var userpassword=$('.userpassword').val();
+            $.ajax({
+                type:'post',
+                // url:'{:url("/doLogin")}',
+                url:'/doLogin',
+                data:{username:username,password:userpassword},
+                dataType:'json',
+                success:function(data){
+                    layer.msg(data.msg);
+                    if(data.code==1){
+                        window.location.href="{:url('/')}";
+                    }
+                },
+                error:function(){
+                    console.log('ajax请求失败');
+                }
+            })
+        })
+    })
+</script>
